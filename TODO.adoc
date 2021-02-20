@@ -1,0 +1,41 @@
+= TODO =
+
+== General ==
+* git des projets
+* API
+* fichier de traduction
+* Responsive
+
+== FirstLayer ==
+
+* Centrer le status indicator avec la flèche
+
+== SecondLayer ==
+
+* Finir l'interface clean
+* help
+** Affiche le texte sous le menu ( smooth )
+* whoami ( présentation classique )
+** descriptif ?
+* contact
+** Mes différentes plateformes pour me contacter
+*** mail
+*** discord
+*** linkedin
+*** formulaire en version terminal ?
+
+== ThirdLayer ==
+
+* Comm avec l'API
+* Fixer les boutons de liens ?
+
+== FourthLayer ==
+
+* Validation et exécution du formulaire
+** Fonction de mailing
+** Comm avec l'API
+
+== Navi ==
+
+* Fin de la quête
+** Photo de popo
