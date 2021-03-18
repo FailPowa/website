@@ -22,6 +22,7 @@
 </template>
 <script>
 import ProjectCard from './Project/ProjectCard';
+import ApiServices from '@/services.js';
 
 export default {
     name: 'ThirdLayer',
@@ -31,40 +32,37 @@ export default {
     data() {
         return {
             projects: [
-                {
-                    id: '1',
-                    name: 'website',
-                    icon: 'vuejs',
-                    color: 'green',
-                    description: 'Le site web sur lequel vous naviguez',
-                    progress: 'ended',
-                    gem: false,
-                    github: 'https://github.com',
-                    url: 'http://google.com',
-                },
-                {
-                    id: '2',
-                    name: 'website\'s API',
-                    icon: 'symfony',
-                    color: 'dark',
-                    description: 'L\' API communiquant avec ce site web',
-                    progress: 'started',
-                    gem: true,
-                    github: 'https://github.com',
-                    url: '',
+                // {
+                //     id: '1',
+                //     name: 'website',
+                //     icon: 'vuejs',
+                //     color: 'green',
+                //     description: 'Le site web sur lequel vous naviguez',
+                //     gem: false,
+                //     github: 'https://github.com',
+                //     url: 'http://google.com',
+                // },
+                // {
+                //     id: '2',
+                //     name: 'website\'s API',
+                //     icon: 'symfony',
+                //     color: 'dark',
+                //     description: 'L\' API communiquant avec ce site web',
+                //     gem: true,
+                //     github: 'https://github.com',
+                //     url: '',
 
-                },
-                {
-                    id: '3',
-                    name: 'Multigame bot',
-                    icon: 'nodejs',
-                    color: 'green',
-                    description: 'Un bot Discord pour jouer à de petits jeux entre amis',
-                    progress: 'in progress',
-                    gem: false,
-                    github: '',
-                    url: '',
-                }
+                // },
+                // {
+                //     id: '3',
+                //     name: 'Multigame bot',
+                //     icon: 'nodejs',
+                //     color: 'green',
+                //     description: 'Un bot Discord pour jouer à de petits jeux entre amis',
+                //     gem: false,
+                //     github: '',
+                //     url: '',
+                // }
             ]
         }
     },
@@ -77,6 +75,13 @@ export default {
             behavior: "smooth"
             });
         }
+    },
+    created() {
+      ApiServices.getProjects().then(res => {
+        res.data.forEach(p => {
+          this.projects.push(p);
+        });
+      })
     }
 }
 </script>

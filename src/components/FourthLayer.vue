@@ -28,6 +28,7 @@ export default {
     name: 'FourthLayer',
     data() {
         return {
+            valid: true,
             name: '',
             nameRules: [
                 v => !!v || 'Name is required',

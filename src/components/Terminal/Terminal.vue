@@ -10,7 +10,7 @@
             </div>
             <b style="padding-left: 2vh;">{{ this.userInput }}</b>
             <div class="typewriter"><b></b></div>
-            <div v-if="userInput == ''" class="input-placeholder">Tapez help</div>
+            <div v-if="userInput == ''" class="input-placeholder">{{ textPlaceholder }}</div>
         </div>
         <div class="terminal-menu">
             <div class="terminal-menu-item" v-for="item in commands" :key="item.name">
@@ -20,7 +20,7 @@
                 </v-btn>
             </div>
         </div>
-        <terminal-response @gem-found="gemFound" @show-help="showHelper" :command="userCommand"></terminal-response>
+        <terminal-response @gem-found="gemFound" @show-help="showHelper" @change-placeholder="changePlaceholder" :command="userCommand"></terminal-response>
     </div>
 </template>
 <script>
@@ -34,6 +34,8 @@ export default {
     data() {
         return {
             userInput: '',
+            allowedInputs: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ".", "@", "&", "$", "*", "%", ";", ":", "/", ",", "?", "!", "+", "="],
+            textPlaceholder: "Tapez help",
             showHelp: false,
             userCommand: '',
             commands: [
@@ -70,13 +72,17 @@ export default {
     },
     methods: {
         doCommand(e) {
-            if(e.keyCode == 8)
+            if(e.key == "Backspace")
                 this.userInput = this.userInput.slice(0, -1);
-            else if(e.keyCode == 13) {
+            else if(e.key == "Enter") {
                 this.userCommand = this.userInput;
                 this.userInput = '';
-            } else if (e.keyCode >= 65 && e.keyCode <= 90)
-                this.userInput += String.fromCharCode(e.keyCode).toLowerCase();        
+            } else {
+                if (e.keyCode >= 65 && e.keyCode <= 90)
+                    this.userInput += String.fromCharCode(e.keyCode).toLowerCase();
+                else if (this.allowedInputs.includes(e.key))
+                    this.userInput += e.key;
+            }        
         },
         gemFound(color) {
             this.$emit('gem-found', color);
@@ -84,6 +90,12 @@ export default {
         showHelper() {
             this.showHelp = !this.showHelp;
             console.log(this.showHelp)
+        },
+        changePlaceholder(value) {
+            if(value == false)
+                this.textPlaceholder = "Tapez help";
+            else
+                this.textPlaceholder = value;
         }
     },
     watch: { 

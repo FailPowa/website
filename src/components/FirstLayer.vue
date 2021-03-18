@@ -7,7 +7,10 @@
             </div>
             <br/>
             <!-- Call API -> 'active', 'positive', 'intermediary', 'negative'-->
-            <status-indicator id="status-indicator" status="negative" :pulse="true" />
+            <div class="status-container">
+              <status-indicator id="status-indicator" status="positive" :pulse="true" />
+              <p>Open To Work</p>
+            </div>
             <div id="scroller" class="scroller">
                 <a @click="scroll('second-layer')"><span></span><span></span><span></span></a>
             </div>
@@ -43,12 +46,35 @@ export default {
 .name {
     font-size: 4em;
 }
+/* Status */
 #status-indicator {
     width: 3em;
     height: 3em;
 }
 
-/** Scroller */
+.status-container {
+  margin-left: 6vh;
+  text-align: center;
+}
+
+.status-container > p {
+  font-size: 2vh;
+  /* Status Positive */
+  color: #66d38f;
+
+  /* Status Negative */
+  /* color: #ed524c; */
+
+  /* Status Active */
+  /* color: #1294fc;  */
+
+  /* Status Intermediary */
+  /* color: #f6aa28; */
+
+}
+/* End Status */
+
+/* Scroller */
 .scroller a {
   position: absolute;
   margin-top: 3vh;
@@ -72,7 +98,7 @@ export default {
   left: 50%;
   width: 48px;
   height: 48px;
-  margin-left: -12px;
+  margin-left: 1vh;
   border-left: 1px solid #fff;
   border-bottom: 1px solid #fff;
   -webkit-transform: rotate(-45deg);
@@ -118,9 +144,9 @@ export default {
     opacity: 0;
   }
 }
-/** END SCROLLER */
+/* END SCROLLER */
 
-/** TYPEWRITER EFFECT */
+/* TYPEWRITER EFFECT */
 .typewriter p {
   overflow: hidden; /* Ensures the content is not revealed until the animation */
   border-right: .10em solid white; /* The typwriter cursor */
@@ -143,5 +169,5 @@ export default {
   from, to { border-color: transparent }
   50% { border-color: white; }
 }
-/** END TYPEWRITER EFFECT */
+/* END TYPEWRITER EFFECT */
 </style>

@@ -5,7 +5,7 @@
             <v-img src="../../images/HorseFlame_Priego_3252.jpg"></v-img>
             <v-card-text class="project-name">
                 <h1 class="title primary--text" style="width: fit-content;">{{ name }}</h1>
-                <v-icon :color="color" class="project-icon">mdi-{{ icon }}</v-icon>
+                <v-icon :color="color" class="project-icon" large>mdi-{{ icon }}</v-icon>
             </v-card-text>
             <v-fade-transition>
                 <v-overlay v-if="hover" absolute color="#036358">
@@ -59,7 +59,7 @@ export default {
 }
 
 .project-icon {
-    left: 2vh;
+    left: 3vh;
 }
 
 .description-text {

@@ -8,7 +8,7 @@
 
 == FirstLayer ==
 
-* Centrer le status indicator avec la flèche
+* Courber le texte autour du status ?
 
 == SecondLayer ==
 
