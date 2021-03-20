@@ -99,11 +99,22 @@ export default {
             switch(newVal) {
                 case 'whoami':
                     this.currentCommand = newVal;
+                    this.$emit('change-placeholder', "Tapez help")
                     break;
                 case 'contact':
                     this.currentCommand = newVal;
-                    if(!this.formSent)
-                        this.$emit('change-placeholder', this.contactForm[0].placeholder)
+                    if(!this.formSent) {
+                        let isSent = false;
+                        this.contactForm.forEach((item) => {
+                            console.log(isSent)
+                            if(!isSent) {
+                                if(item.value == '') {
+                                    this.$emit('change-placeholder', item.placeholder);
+                                    isSent = true;
+                                }
+                            }
+                        });
+                    }
                     break;
                 case 'gem':
                     this.currentCommand = newVal;

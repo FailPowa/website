@@ -11,6 +11,7 @@
                 :color="p.color"
                 :github="p.github"
                 :url="p.url"
+                data-aos="zoom-in-down"
             ></project-card>
         </v-layout>
         <v-layout justify-center align-center>
@@ -71,9 +72,9 @@ export default {
             this.$emit('gem-found', 'blue');
         },
         scroll(id) {  
-            document.getElementById(id).scrollIntoView({
+          document.getElementById(id).scrollIntoView({
             behavior: "smooth"
-            });
+          });
         }
     },
     created() {

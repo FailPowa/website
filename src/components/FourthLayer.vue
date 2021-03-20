@@ -5,14 +5,14 @@
         </v-row>
         <v-row>
             <v-col class="offset-md-2 col-md-3">
-                <div v-for="c in contacts" :key="c.name" class="contact-icon-container animate__animated animate__fadeInLeft">
+                <div v-for="c in contacts" :key="c.name" class="contact-icon-container" data-aos="fade-down-right">
                     <v-icon v-if="!c.gem" x-large color="white" class="contact-icon">{{ c.icon }}</v-icon>
                     <v-icon v-else x-large color="green" class="contact-icon" @click="gemFound">{{ c.icon }}</v-icon>                    
                     <p class="white--text contact-icon-text">{{ c.text }}</p>
                 </div>
             </v-col>
             <v-col class="offset-md-1 col-md-6">
-                <v-form ref="form" class="form" v-model="valid" lazy-validation dark>
+                <v-form ref="form" class="form" v-model="valid" lazy-validation dark data-aos="fade-down-left">
                     <v-text-field v-model="name" :counter="10" :rules="nameRules" label="Name" solo required></v-text-field>
                     <v-text-field v-model="email" :rules="emailRules" label="E-mail" solo required></v-text-field>
                     <v-select v-model="select" :items="items" :rules="[v => !!v || 'Item is required']" label="Item" solo required></v-select>

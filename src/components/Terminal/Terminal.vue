@@ -14,7 +14,7 @@
         </div>
         <div class="terminal-menu">
             <div class="terminal-menu-item" v-for="item in commands" :key="item.name">
-                <v-btn outlined large color="teal" class="menu-btn" @click="userCommand = item.name">
+                <v-btn outlined large color="teal" data-aos="flip-up" class="menu-btn" @click="menuClick(item.name)">
                     <v-icon :color="item.color" x-large>{{ item.icon }}</v-icon>
                     <p v-if="showHelp">{{ item.name }}</p>
                 </v-btn>
@@ -78,13 +78,21 @@ export default {
                 this.userCommand = this.userInput;
                 this.userInput = '';
             } else {
+                console.log(e.key) // Problème du @
                 if (e.keyCode >= 65 && e.keyCode <= 90)
                     this.userInput += String.fromCharCode(e.keyCode).toLowerCase();
                 else if (this.allowedInputs.includes(e.key))
                     this.userInput += e.key;
             }        
         },
+        menuClick(name) {
+            this.userCommand = name;
+            this.userInput = '';
+            if(this.textPlaceholder != "Tapez help")
+                this.textPlaceholder = "Tapez help"
+        },
         gemFound(color) {
+            this.textPlaceholder = "Tapez help";
             this.$emit('gem-found', color);
         },
         showHelper() {
@@ -92,6 +100,7 @@ export default {
             console.log(this.showHelp)
         },
         changePlaceholder(value) {
+            console.log(value);
             if(value == false)
                 this.textPlaceholder = "Tapez help";
             else
@@ -102,8 +111,11 @@ export default {
         isActive: function(newVal) {
             if(newVal)
                 window.addEventListener('keyup', this.doCommand);
-            else
+            else {
                 window.removeEventListener('keyup', this.doCommand);
+                this.userInput = '';
+                this.userCommand = '';
+            }
         },
     }
 }

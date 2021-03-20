@@ -1,32 +1,22 @@
 = TODO =
 
 == General ==
-* git des projets
-* API
 * fichier de traduction
 * Responsive
 
 == FirstLayer ==
 
-* Courber le texte autour du status ?
 
 == SecondLayer ==
 
 * Finir l'interface clean
+* Vérifier que le mail est bien un mail
 * help
-** Affiche le texte sous le menu ( smooth )
 * whoami ( présentation classique )
 ** descriptif ?
-* contact
-** Mes différentes plateformes pour me contacter
-*** mail
-*** discord
-*** linkedin
-*** formulaire en version terminal ?
 
 == ThirdLayer ==
 
-* Comm avec l'API
 * Fixer les boutons de liens ?
 
 == FourthLayer ==
