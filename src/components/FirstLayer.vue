@@ -8,8 +8,8 @@
             <br/>
             <!-- Call API -> 'active', 'positive', 'intermediary', 'negative'-->
             <div class="status-container">
-              <status-indicator id="status-indicator" status="positive" :pulse="true" />
-              <p>Open To Work</p>
+              <status-indicator id="status-indicator" :status="statusValue" :pulse="true" />
+              <p id="status-text">{{ statusText }}</p>
             </div>
             <div id="scroller" class="scroller">
                 <a @click="scroll('second-layer')"><span></span><span></span><span></span></a>
@@ -19,12 +19,10 @@
 </template>
 <script>
 import { StatusIndicator } from 'vue-status-indicator';
+import ApiServices from '@/services.js';
 
 export default {
     name: "FirstLayer",
-    props: {
-
-    },
     components: {
         StatusIndicator
     },
@@ -37,8 +35,19 @@ export default {
     },
     data() {
         return {
-            center: 'center'
+          statusValue: "",
+          statusColor: "",
+          statusText: ""
         }
+    },
+    created() {
+      ApiServices.getStatus().then(res => {
+        this.statusValue = res.data.value;
+        this.statusColor = res.data.color;
+        this.statusText = res.data.text;
+        let text = document.getElementById('status-text');
+        text.style.color = this.statusColor;
+      })
     }
 }
 </script>
@@ -57,20 +66,8 @@ export default {
   text-align: center;
 }
 
-.status-container > p {
+#status-text {
   font-size: 2vh;
-  /* Status Positive */
-  color: #66d38f;
-
-  /* Status Negative */
-  /* color: #ed524c; */
-
-  /* Status Active */
-  /* color: #1294fc;  */
-
-  /* Status Intermediary */
-  /* color: #f6aa28; */
-
 }
 /* End Status */
 
