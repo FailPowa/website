@@ -6,73 +6,70 @@
         <v-row>
             <v-col class="offset-md-2 col-md-3">
                 <div v-for="c in contacts" :key="c.name" class="contact-icon-container" data-aos="fade-down-right">
-                    <v-icon v-if="!c.gem" x-large color="white" class="contact-icon">{{ c.icon }}</v-icon>
-                    <v-icon v-else x-large color="green" class="contact-icon" @click="gemFound">{{ c.icon }}</v-icon>                    
+                    <v-icon x-large color="white" class="contact-icon">{{ c.icon }}</v-icon>
                     <p class="white--text contact-icon-text">{{ c.text }}</p>
                 </div>
             </v-col>
             <v-col class="offset-md-1 col-md-6">
-                <v-form ref="form" class="form" v-model="valid" lazy-validation dark data-aos="fade-down-left">
-                    <v-text-field v-model="name" :counter="10" :rules="nameRules" label="Name" solo required></v-text-field>
-                    <v-text-field v-model="email" :rules="emailRules" label="E-mail" solo required></v-text-field>
-                    <v-select v-model="select" :items="items" :rules="[v => !!v || 'Item is required']" label="Item" solo required></v-select>
-                    <v-textarea solo name="input-7-4" label="Solo textarea"></v-textarea>
-                    <v-btn color="success" class="mr-4">Validate</v-btn>
+                <v-form ref="form" class="form" v-model="valid" dark data-aos="fade-down-left">
+                    <v-text-field v-model="formDatas.name" :counter="50" :rules="nameRules" label="Nom" solo dense required></v-text-field>
+                    <v-text-field v-model="formDatas.firstname" :counter="50" :rules="nameRules" label="Prénom" solo dense required></v-text-field>
+                    <v-text-field v-model="formDatas.business" :counter="50" :rules="nameRules" label="Entreprise" solo dense required></v-text-field>
+                    <v-text-field v-model="formDatas.mail" :rules="emailRules" label="E-mail" solo dense required></v-text-field>
+                    <v-textarea v-model="formDatas.message" label="Laissez moi votre message..." solo></v-textarea>
+                    <v-btn :color="!valid ? 'error' : 'success'" @click="validateForm" class="mr-4">Envoyer</v-btn>
+                    <v-icon v-if="valid" class="animate__animated animate__fadeInLeft" color="green" @click="gemFound" x-large>mdi-cards-diamond</v-icon>
                 </v-form>
             </v-col>
         </v-row>
     </v-container>
 </template>
 <script>
+import ApiServices from '../services';
+
 export default {
     name: 'FourthLayer',
     data() {
         return {
-            valid: true,
-            name: '',
+            valid: false,
+            formDatas : {
+                name: '',
+                firstname: '',
+                business: '',
+                mail: '',
+                message: '',
+            },
             nameRules: [
-                v => !!v || 'Name is required',
-                v => (v && v.length <= 10) || 'Name must be less than 10 characters',
+                v => !!v || 'Ce champs est requis',
+                v => (v && v.length <= 50) || 'Le nom doit faire moins de 50 caractères !',
             ],
-            email: '',
             emailRules: [
-                v => !!v || 'E-mail is required',
-                v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
-            ],
-            select: null,
-            items: [
-                'Item 1',
-                'Item 2',
-                'Item 3',
-                'Item 4',
+                v => !!v || 'Un mail est requis',
+                v => /.+@.+\..+/.test(v) || 'Le mail doit être valide !',
             ],
             contacts: [
                 {
                     name: 'Discord',
                     icon: 'mdi-discord',
                     text: 'FailPowa#9988',
-                    gem: true,
                     url: '#'
                 },
                 {
                     name: 'Github',
                     icon: 'mdi-github',
                     text: 'FailPowa',
-                    gem: false,
                     url: '#'
                 },
                 {
                     name: 'LinkedIn',
                     icon: 'mdi-linkedin',
                     text: 'Florentin Bonnay',
-                    gem: false,
                     url: '#'
                 },
                 {
                     name: 'Mail',
                     icon: 'mdi-at',
                     text: 'florentinb.pro@gmail.com',
-                    gem: false,
                     url: '#'
                 }
             ],
@@ -81,8 +78,13 @@ export default {
     methods: {
         gemFound: function() {
             this.$emit('gem-found', 'green');
+        },
+        validateForm: function() {
+            if(this.$refs.form.validate()) {
+                ApiServices.submitForm(this.formDatas);
+            }
         }
-    },
+    }
 }
 </script>
 <style scoped>

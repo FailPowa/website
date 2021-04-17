@@ -13,6 +13,9 @@ export default {
     components: {
         Terminal
     },
+    props: {
+        active: Boolean
+    },
     data() {
         return {
             scrollPosition: null,
@@ -20,19 +23,14 @@ export default {
         }
     },
     methods: {
-        updateScroll() {
-            this.scrollPosition = window.scrollY;
-            if(this.scrollPosition >= 500 && this.scrollPosition <= 1200)
-                this.isActive = true;
-            else
-                this.isActive = false;
-        },
         gemFound(color) {
             this.$emit('gem-found', color);
         }
     },
-    mounted() {
-        window.addEventListener('scroll', this.updateScroll);
+    watch: {
+        active: function(newVal) {
+            this.isActive = newVal;
+        }
     }
 }
 </script>

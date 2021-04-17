@@ -1,31 +1,28 @@
 = TODO =
 
 == General ==
-* fichier de traduction
 * Responsive
+* Footer
+** CGU & CGV
+** https://www.service-public.fr/professionnels-entreprises/vosdroits/F31228
 
 == FirstLayer ==
-
+ OK
 
 == SecondLayer ==
 
-* Finir l'interface clean
-* Vérifier que le mail est bien un mail
-* help
-* whoami ( présentation classique )
-** descriptif ?
+* whoami
+** présentation ? plusieurs propositions ?
+** ( - Un projet en cours ? -> Prestation dev - Une idée en tête ? -> Devis )
+* contact
+** Bug des champs avec le handler
 
 == ThirdLayer ==
-
-* Fixer les boutons de liens ?
+ OK
 
 == FourthLayer ==
-
-* Validation et exécution du formulaire
-** Fonction de mailing
-** Comm avec l'API
+ OK
 
 == Navi ==
 
-* Fin de la quête
-** Photo de popo
+ OK

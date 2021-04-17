@@ -16,20 +16,44 @@
                 <v-icon large color="white" style="margin-left: 4vh; margin-right: 1vh;">{{ c.icon }}</v-icon>               
                 <p class="white--text" style="margin-top: 1vh;">{{ c.text }}</p>
             </div>
-            <p style="color: grey; font-size: 2vh; margin-top: 3vh;">N'hésitez pas à me laisser vos coordonnées afin que je vous recontacte dès que possible</p>
-            <div v-for="input in contactForm" :key="input.id" style="display: flex;">
-                <b v-if="input.enable" style="color: lightgrey;">{{ input.name }} :</b><p style="margin-left: 1vh;">{{ input.value }}</p>
+            <div class="terminal-form">
+                <p style="color: grey; font-size: 2vh; margin-left: 2vh;">N'hésitez pas à me laisser vos coordonnées afin que je vous recontacte dès que possible</p>
+                <p style="color: grey; font-size: 2vh; margin-left: 2vh;">Un autre formulaire est disponible plus bas si vous souhaitez me laisser un message avec vos informations</p>
+                <div v-for="input in contactForm" :key="input.id" style="display: flex;">
+                    <v-text-field 
+                        outlined 
+                        dark 
+                        clearable 
+                        dense 
+                        style="margin-right: 3vh; margin-left: 3vh;"
+                        v-model="input.value"
+                        :type="input.type" 
+                        :label="input.name"
+                        :rules="input.type == 'mail' ? emailRules : nameRules"
+                        :placeholder="input.placeholder"
+                        @focus="handleFocus"
+                        @blur="handleBlur"></v-text-field>
+                </div>
+                <div style="display: inline-flex; margin-left: 5vh; font-size: 2vh;">
+                    <p>Envoyer ?</p>
+                    <!-- Empêcher l'envoi si tous les champs ne sont pas remplis -->
+                    <v-btn outlined color="teal" style="margin-left: 2vh;" @click="fillContactForm('yes')">Yes</v-btn>
+                    <!-- Reset les champs si clic sur non -->
+                    <v-btn outlined color="teal" style="margin-left: 2vh;" @click="clearForm">No</v-btn>
+                </div>
             </div>
-            <div v-if="formSent" style="color: grey; font-size: 2vh; margin-top: 3vh;">
+            <div v-if="formSent" style="color: grey; font-size: 2vh; margin-top: 1vh;">
                 <p style="color: yellowgreen;">Vos coordonnées ont été transmises</p>
                 <p style="display: none;color: red;">Une erreur s'est produite lors de la transmission de vos données</p>
                 <p>Merci d'avoir utilisé ce terminal !</p>
-                <p>Je vous invites à taper <font color="#2196F3">next</font> afin de continuer votre navigation sur mon site</p>
+                <p>Je vous invite à taper <font color="#2196F3">next</font> afin de continuer votre navigation sur mon site</p>
             </div>
         </div>
     </div>
 </template>
 <script>
+import ApiServices from '../../services';
+
 export default {
     name: 'TerminalResponse',
     props: {
@@ -73,23 +97,38 @@ export default {
                     id: 1,
                     name: 'Nom',
                     placeholder: 'Tapez votre nom',
+                    type: 'text',
                     value: '',
-                    enable: true
                 },
                 {
                     id: 2,
                     name: 'Prénom',
                     placeholder: 'Tapez votre prénom',
+                    type: 'text',
                     value: '',
-                    enable: false
                 },
                 {
                     id: 3,
+                    name: 'Entreprise',
+                    placeholder: 'Tapez le nom de votre entreprise',
+                    type: 'text',
+                    value: '',
+                },
+                {
+                    id: 4,
                     name: 'Mail',
                     placeholder: 'Tapez votre mail',
+                    type: 'mail',
                     value: '',
-                    enable: false
                 }
+            ],
+            nameRules: [
+                v => !!v || 'Ce champs est requis',
+                v => (v && v.length <= 50) || 'Le nom doit faire moins de 50 caractères !',
+            ],
+            emailRules: [
+                v => !!v || 'Un mail est requis',
+                v => /.+@.+\..+/.test(v) || 'Le mail doit être valide !',
             ],
             formSent: false
         }  
@@ -99,22 +138,9 @@ export default {
             switch(newVal) {
                 case 'whoami':
                     this.currentCommand = newVal;
-                    this.$emit('change-placeholder', "Tapez help")
                     break;
                 case 'contact':
                     this.currentCommand = newVal;
-                    if(!this.formSent) {
-                        let isSent = false;
-                        this.contactForm.forEach((item) => {
-                            console.log(isSent)
-                            if(!isSent) {
-                                if(item.value == '') {
-                                    this.$emit('change-placeholder', item.placeholder);
-                                    isSent = true;
-                                }
-                            }
-                        });
-                    }
                     break;
                 case 'gem':
                     this.currentCommand = newVal;
@@ -138,25 +164,41 @@ export default {
     methods: {
         fillContactForm(valeur) {
             this.contactForm.every(element => {
-                if(element.value == '') {
+                if(element.value == '' && valeur != "yes") {
                     element.value = valeur;
-                    if(element.id != 3) {
-                        this.contactForm[element.id].enable = true;
-                        this.$emit('change-placeholder', this.contactForm[element.id].placeholder);
-                    } else {
-                        this.$emit('change-placeholder', false);
-                    }
                     return false;
                 } else {
+                    if(element.id == this.contactForm.length && element.value != '' && valeur == "yes")
+                        this.sendForm()
                     return true;
                 }
             });
-            if(this.contactForm[this.contactForm.length - 1].value != '')
-                this.sendForm()
+        },
+        handleFocus() {
+            this.$emit('change-listener', false);
+        },
+        handleBlur() {
+            this.$emit('change-listener', true);
         },
         sendForm() {
-            console.log(this.contactForm);
+            let body = {
+                "name": this.contactForm[0].value,
+                "firstname": this.contactForm[1].value,
+                "business": this.contactForm[2].value,
+                "mail": this.contactForm[3].value,
+                "message": "Hey futur moi, cet utilisateur te contacte via le formulaire du terminal ! Recontacte-le rapidement !"
+            };
+            ApiServices.submitForm(body);
             this.formSent = true;
+            this.$emit('change-listener', true);
+        },
+        clearForm() {
+            this.contactForm.forEach(element => {
+                element.value = '';
+            })
+        },
+        handleKey() {
+            
         }
     }
 }
@@ -164,13 +206,19 @@ export default {
 <style scoped>
 .terminal-response {
     padding: 5vh;
-    width: 80%;
+    width: 90%;
 }
 
 .term-icon-container {
     width: fit-content;
     display: inline-flex;
     font-size: 2vh;
+}
+
+.terminal-form {
+    border-style: double;
+    border-color: #687180;
+    width: 80%;
 }
 
 .red-gem {

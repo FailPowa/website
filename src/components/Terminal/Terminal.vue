@@ -13,14 +13,18 @@
             <div v-if="userInput == ''" class="input-placeholder">{{ textPlaceholder }}</div>
         </div>
         <div class="terminal-menu">
-            <div class="terminal-menu-item" v-for="item in commands" :key="item.name">
-                <v-btn outlined large color="teal" data-aos="flip-up" class="menu-btn" @click="menuClick(item.name)">
+            <div style="display: flex;" class="terminal-menu-item" v-for="item in commands" :key="item.name">
+                <v-btn outlined large color="teal" data-aos="flip-up" class="menu-btn" @click="userInput = item.name">
                     <v-icon :color="item.color" x-large>{{ item.icon }}</v-icon>
-                    <p v-if="showHelp">{{ item.name }}</p>
                 </v-btn>
+                <p style="font-size: 2vh; padding: 1vh; color: lightgrey;" class="animate__animated animate__fadeIn" v-if="showHelp">{{ item.name }}</p>
             </div>
         </div>
-        <terminal-response @gem-found="gemFound" @show-help="showHelper" @change-placeholder="changePlaceholder" :command="userCommand"></terminal-response>
+        <terminal-response 
+            @gem-found="gemFound" 
+            @show-help="showHelper" 
+            @change-listener="listenKeyboard"
+            :command="userCommand"></terminal-response>
     </div>
 </template>
 <script>
@@ -34,7 +38,6 @@ export default {
     data() {
         return {
             userInput: '',
-            allowedInputs: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ".", "@", "&", "$", "*", "%", ";", ":", "/", ",", "?", "!", "+", "="],
             textPlaceholder: "Tapez help",
             showHelp: false,
             userCommand: '',
@@ -78,18 +81,9 @@ export default {
                 this.userCommand = this.userInput;
                 this.userInput = '';
             } else {
-                console.log(e.key) // Problème du @
                 if (e.keyCode >= 65 && e.keyCode <= 90)
                     this.userInput += String.fromCharCode(e.keyCode).toLowerCase();
-                else if (this.allowedInputs.includes(e.key))
-                    this.userInput += e.key;
             }        
-        },
-        menuClick(name) {
-            this.userCommand = name;
-            this.userInput = '';
-            if(this.textPlaceholder != "Tapez help")
-                this.textPlaceholder = "Tapez help"
         },
         gemFound(color) {
             this.textPlaceholder = "Tapez help";
@@ -105,17 +99,20 @@ export default {
                 this.textPlaceholder = "Tapez help";
             else
                 this.textPlaceholder = value;
-        }
-    },
-    watch: { 
-        isActive: function(newVal) {
-            if(newVal)
+        },
+        listenKeyboard(value) {
+            if(value)
                 window.addEventListener('keyup', this.doCommand);
             else {
                 window.removeEventListener('keyup', this.doCommand);
                 this.userInput = '';
                 this.userCommand = '';
             }
+        },
+    },
+    watch: { 
+        isActive: function(newVal) {
+            this.listenKeyboard(newVal);
         },
     }
 }
