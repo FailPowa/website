@@ -10,6 +10,13 @@
       <third-layer @gem-found="gemFound" class="main-content"></third-layer>
       <fourth-layer @gem-found="gemFound" class="main-content"></fourth-layer>
       <navi :red-gem="redGem" :green-gem="greenGem" :blue-gem="blueGem" :nbGems="nbGems"></navi>
+      <v-footer dark>
+        <v-row justify="left" no-gutters>
+          <v-btn color="white" text rounded>CGU</v-btn>
+          <v-btn color="white" text rounded>CGV</v-btn>
+        </v-row>
+          <p><strong>Florentin Bonnay </strong> {{ new Date().getFullYear() }}</p>
+      </v-footer>
     </v-main>
   </v-app>
 </template>

@@ -72,6 +72,7 @@ export default {
     width: 150px;
 	bottom: 5vh;
     right: 5vh;
+	z-index: 1;
 	animation: voo 6s ease-in-out infinite;
 }
 

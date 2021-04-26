@@ -2,7 +2,7 @@
     <v-hover>
         <template v-slot:default="{ hover }">
         <v-card class="mx-auto" max-width="400">
-            <v-img src="../../images/HorseFlame_Priego_3252.jpg"></v-img>
+            <v-img :src="image" height="300" position="left" ></v-img>
             <v-card-text class="project-name">
                 <h1 class="title primary--text" style="width: fit-content;">{{ name }}</h1>
                 <v-icon :color="color" class="project-icon" large>mdi-{{ icon }}</v-icon>
@@ -44,12 +44,16 @@ export default {
         gem: Boolean,
         color: String,
         github: String,
-        url: String
+        url: String,
+        image: String,
     },
     methods: {
         gemFound: function() {
             this.$emit('gem-found', 'blue');
         }
+    },
+    mounted() {
+        console.log(this.image);
     }
 }
 </script>
