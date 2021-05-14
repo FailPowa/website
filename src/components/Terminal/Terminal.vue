@@ -14,7 +14,7 @@
         </div>
         <div class="terminal-menu">
             <div style="display: flex;" class="terminal-menu-item" v-for="item in commands" :key="item.name">
-                <v-btn outlined large color="teal" data-aos="flip-up" class="menu-btn" @click="userInput = item.name">
+                <v-btn outlined large color="teal" data-aos="flip-up" class="menu-btn" @click="menuClick(item.name)">
                     <v-icon :color="item.color" x-large>{{ item.icon }}</v-icon>
                 </v-btn>
                 <p style="font-size: 2vh; padding: 1vh; color: lightgrey;" class="animate__animated animate__fadeIn" v-if="showHelp">{{ item.name }}</p>
@@ -53,7 +53,7 @@ export default {
                     color: 'red',
                 },
                 {
-                    name: 'whoami',
+                    name: 'presentation',
                     icon: 'mdi-account-circle',
                     color: 'white',
                 },
@@ -109,6 +109,13 @@ export default {
                 this.userCommand = '';
             }
         },
+        menuClick(value) {
+            this.userInput = value;
+            setTimeout(() => {
+                this.userCommand = this.userInput;
+                this.userInput = '';
+            }, 500)
+        }
     },
     watch: { 
         isActive: function(newVal) {

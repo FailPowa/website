@@ -11,11 +11,7 @@
 
 == SecondLayer ==
 
-* whoami
-** présentation ? plusieurs propositions ?
-** ( - Un projet en cours ? -> Prestation dev - Une idée en tête ? -> Devis )
-* contact
-** Bug des champs avec le handler
+* Bug des champs avec le handler
 
 == ThirdLayer ==
  OK

@@ -81,6 +81,7 @@ export default {
           if(this.scrollPosition <= 1200)
             this.terminalIsActive = true;
         } else {
+          console.log(this.terminalIsActive);
           this.showBtn = false;
           this.terminalIsActive = false;
         }

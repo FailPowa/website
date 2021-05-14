@@ -3,13 +3,23 @@
         <div v-if="currentCommand == 'gem'" class="animate__animated animate__fadeIn">
             <v-icon color="red" class="animate__animated animate__bounce animate__infinite" x-large>mdi-cards-diamond</v-icon>
             <b>Bravo ! Tu as obtenu le premier cristal !</b>
+            <p style="font-size: 2vh; color: lightgrey; margin-top: 2vh;">Passes ta souris sur Navi en bas à droite de l'écran pour suivre ta progression</p>
         </div>
-        <div v-if="currentCommand == 'whoami'" class="animate__animated animate__fadeIn">
-            <p>Florentin Bonnay</p>
-            <p>4 ans d'études & 3 ans d'expériences pro</p>
-            <p>Travaillé sur de différentes technos</p>
-            <p>Curieux, autonome, passioné</p>
-            <p>Capacité d'apprendre et de s'adapter</p>
+        <div v-if="currentCommand == 'presentation'" class="animate__animated animate__fadeIn">
+            <v-list dark color="transparent">
+                <template v-for="item in presentationList">
+                    <v-list-item :key="item.id">
+                        <v-list-item-content style="border-bottom: double 0.5vh lightgrey; margin-bottom: 2vh;">
+                            <v-list-item-title style="font-size: 3vh; margin-bottom: 1vh;">
+                                <v-icon large>mdi-{{ item.icon }}</v-icon> {{ item.title }}
+                                </v-list-item-title>
+                            <div v-for="text in item.text" :key="text">
+                                <v-list-item-subtitle style="font-size: 2vh;">{{ text }}</v-list-item-subtitle>
+                            </div>
+                        </v-list-item-content>
+                    </v-list-item>
+                </template>
+            </v-list>
         </div>
         <div v-if="currentCommand == 'contact'" class="animate__animated animate__fadeIn">
             <div v-for="c in contacts" :key="c.name" class="term-icon-container">
@@ -34,12 +44,10 @@
                         @focus="handleFocus"
                         @blur="handleBlur"></v-text-field>
                 </div>
-                <div style="display: inline-flex; margin-left: 5vh; font-size: 2vh;">
-                    <p>Envoyer ?</p>
+                <div style="display: inline-flex; margin-left: 5vh; margin-bottom: 2vh; font-size: 2vh;">
                     <!-- Empêcher l'envoi si tous les champs ne sont pas remplis -->
-                    <v-btn outlined color="teal" style="margin-left: 2vh;" @click="fillContactForm('yes')">Yes</v-btn>
-                    <!-- Reset les champs si clic sur non -->
-                    <v-btn outlined color="teal" style="margin-left: 2vh;" @click="clearForm">No</v-btn>
+                    <v-btn outlined color="teal" style="margin-left: 2vh;" @click="fillContactForm('send')">Envoyer</v-btn>
+                    <v-btn outlined color="teal" style="margin-left: 2vh;" @click="clearForm">Clear</v-btn>
                 </div>
             </div>
             <div v-if="formSent" style="color: grey; font-size: 2vh; margin-top: 1vh;">
@@ -130,13 +138,41 @@ export default {
                 v => !!v || 'Un mail est requis',
                 v => /.+@.+\..+/.test(v) || 'Le mail doit être valide !',
             ],
-            formSent: false
+            formSent: false,
+            presentationList: [
+                {
+                    id: 1,
+                    icon: "gesture-double-tap",
+                    title: "Besoin d'un coup de main ?",
+                    text: [
+                        "Je saurais vous apporter le soutien dont vous avez besoin dans vos projets.",
+                        "Fort de mes expériences dans de nombreuses technologies, je saurais me montrer polyvalent et autonome."
+                    ]
+                },
+                {
+                    id: 2,
+                    icon: "lightbulb-on",
+                    title: "Une nouvelle idée en tête ?",
+                    text: [
+                        "Contactez-moi pour m'exposer votre idée, discutons-en !",
+                        "Un regard neuf et approfondi sur votre idée permettrait de la faire évoluer en projet."
+                    ]
+                },
+                {
+                    id: 3,
+                    icon: "coffee",
+                    title: "Envie d'un café ?",
+                    text: [
+                        "Discutons de sujets, professionnels ou non, autour d'un café, à tête reposée."
+                    ]
+                }
+            ]
         }  
     },
     watch: {
         command: function(newVal) {
             switch(newVal) {
-                case 'whoami':
+                case 'presentation':
                     this.currentCommand = newVal;
                     break;
                 case 'contact':
@@ -164,7 +200,7 @@ export default {
     methods: {
         fillContactForm(valeur) {
             this.contactForm.every(element => {
-                if(element.value == '' && valeur != "yes") {
+                if(element.value == '' && valeur != "send") {
                     element.value = valeur;
                     return false;
                 } else {
@@ -206,7 +242,7 @@ export default {
 <style scoped>
 .terminal-response {
     padding: 5vh;
-    width: 90%;
+    width: 80%;
 }
 
 .term-icon-container {
@@ -218,7 +254,7 @@ export default {
 .terminal-form {
     border-style: double;
     border-color: #687180;
-    width: 80%;
+    width: 100%;
 }
 
 .red-gem {
