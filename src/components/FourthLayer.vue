@@ -19,6 +19,7 @@
                     <v-textarea v-model="formDatas.message" label="Laissez moi votre message..." solo></v-textarea>
                     <v-btn :color="!valid ? 'error' : 'success'" @click="validateForm" class="mr-4">Envoyer</v-btn>
                     <v-icon v-if="valid" class="animate__animated animate__fadeInLeft" color="green" @click="gemFound" x-large>mdi-cards-diamond</v-icon>
+                    <p v-if="formSent" class="animate__animated animate__fadeInDown validate-message">Votre message a bien été envoyé !</p>
                 </v-form>
             </v-col>
         </v-row>
@@ -32,6 +33,7 @@ export default {
     data() {
         return {
             valid: false,
+            formSent: false,
             formDatas : {
                 name: '',
                 firstname: '',
@@ -81,7 +83,11 @@ export default {
         },
         validateForm: function() {
             if(this.$refs.form.validate()) {
-                ApiServices.submitForm(this.formDatas);
+                ApiServices.submitForm(this.formDatas).then(res => {
+                    if(res.status == 200)
+                        this.formSent = true;
+                    // Gestion des erreurs à ajouter ( status = 400 || 403 || 401 || 404)
+                });
             }
         }
     }
@@ -109,5 +115,11 @@ export default {
 .fourth-title {
     margin-top: 10vh;
     margin-bottom: 10vh;
+}
+.validate-message {
+    color: #4caf50;
+    font-size: 2vh;
+    display: inline-flex;
+    margin-left: 15px;
 }
 </style>

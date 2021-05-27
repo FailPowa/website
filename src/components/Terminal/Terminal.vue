@@ -24,6 +24,7 @@
             @gem-found="gemFound" 
             @show-help="showHelper" 
             @change-listener="listenKeyboard"
+            :is-active="isActive"
             :command="userCommand"></terminal-response>
     </div>
 </template>
@@ -91,19 +92,19 @@ export default {
         },
         showHelper() {
             this.showHelp = !this.showHelp;
-            console.log(this.showHelp)
         },
         changePlaceholder(value) {
-            console.log(value);
             if(value == false)
                 this.textPlaceholder = "Tapez help";
             else
                 this.textPlaceholder = value;
         },
         listenKeyboard(value) {
-            if(value)
+            if(value) {
+                this.userInput = '';
+                this.userCommand = '';
                 window.addEventListener('keyup', this.doCommand);
-            else {
+            } else {
                 window.removeEventListener('keyup', this.doCommand);
                 this.userInput = '';
                 this.userCommand = '';

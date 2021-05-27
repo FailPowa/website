@@ -51,9 +51,6 @@ export default {
         gemFound: function() {
             this.$emit('gem-found', 'blue');
         }
-    },
-    mounted() {
-        console.log(this.image);
     }
 }
 </script>

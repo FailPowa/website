@@ -56,8 +56,8 @@ export default {
 		nbGems: Number
 	},
 	methods: {
-		gemFound(color) {
-			console.log(color);
+		gemFound() {
+			// console.log(color);
 		},
 		questComplete() {
 			this.questCompleted = this.nbGems == 3 ? true : false;

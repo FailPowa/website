@@ -66,6 +66,7 @@ export default {
     name: 'TerminalResponse',
     props: {
         command: String,
+        isActive: Boolean
     },
     data() {
         return {
@@ -195,7 +196,13 @@ export default {
                         this.fillContactForm(newVal);
                     }
             }
-        }
+        },
+        isActive: function() {
+            this.currentCommand = '';
+            this.contactForm.forEach(item => {
+                item.value = '';
+            });
+        },
     },
     methods: {
         fillContactForm(valeur) {

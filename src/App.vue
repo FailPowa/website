@@ -1,6 +1,6 @@
 <template>
-  <v-app>
-    <v-app-bar app color="transparent" class="main-content">
+  <v-app v-if="!isMobile()">
+    <v-app-bar color="transparent" class="main-content">
       <v-btn v-for="item in menuItems" :key="item.name" @click="scroll(item.goTo)" class="btn-menu animate__animated animate__fadeInDown" text x-large dark>{{ item.name }}</v-btn>
     </v-app-bar>
     <v-main>
@@ -19,15 +19,26 @@
       </v-footer>
     </v-main>
   </v-app>
+  <v-app class="mobile-app" v-else>
+    <mobile-layer :cards="mobileCards" class="main-mobile-content"></mobile-layer>
+    <v-footer color="#503177" absolute style="bottom: 7vh;">
+      <v-btn v-for="item in menuItems" :key="item.name" @click="scroll(item.goTo)" class="btn-menu animate__animated animate__fadeInDown" text small dark>{{ item.name }}</v-btn>
+    </v-footer>
+  </v-app>
 </template>
 
 <script>
+// Components for PC
 import FirstLayer from './components/FirstLayer'
 import SecondLayer from './components/SecondLayer'
 import ThirdLayer from './components/ThirdLayer'
 import FourthLayer from './components/FourthLayer'
 import Navi from './components/Navi'
 import BackToTopBtn from './components/BackToTopBtn'
+// Components for Mobile
+import MobileLayer from './mobile-components/MobileLayer'
+// Plugin
+import detectMobile from './plugins/detectMobile'
 
 export default {
   name: 'App',
@@ -37,7 +48,8 @@ export default {
     ThirdLayer,
     FourthLayer,
     Navi,
-    BackToTopBtn
+    BackToTopBtn,
+    MobileLayer,
   },
   data() {    
     return {
@@ -52,7 +64,8 @@ export default {
       greenGem: false,
       nbGems: 0,
       showBtn: false,
-      terminalIsActive: false
+      terminalIsActive: false,
+      mobileCards: ["test", "ez", "ezez", "test 2"]
     }
   },
   methods: {
@@ -76,15 +89,8 @@ export default {
     },
     updateScroll() {
         this.scrollPosition = window.scrollY;
-        if(this.scrollPosition >= 500) {
-          this.showBtn = true;
-          if(this.scrollPosition <= 1200)
-            this.terminalIsActive = true;
-        } else {
-          console.log(this.terminalIsActive);
-          this.showBtn = false;
-          this.terminalIsActive = false;
-        }
+        this.terminalIsActive = this.scrollPosition >= 500 && this.scrollPosition <= 1200 ? true : false;
+        this.showBtn = this.scrollPosition >= 500 ? true : false;
     },
     scroll(id) {
       document.getElementById(id).scrollIntoView({
@@ -94,10 +100,12 @@ export default {
   },
   mounted() {
     window.addEventListener('scroll', this.updateScroll);
-  }
+  },
+  mixins: [detectMobile],
 };
 </script>
 <style scoped>
+/* main content for pc */
 .main-content {
   background: url('https://images.unsplash.com/photo-1534972195531-d756b9bfa9f2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=2000') no-repeat center center fixed;
   background-size: cover;
@@ -107,7 +115,19 @@ export default {
   max-height: 100vh;
 }
 
+.main-mobile-content {
+  width: 100%;
+  height: 100%;
+  max-height: 90vh;
+  min-height: 90vh;
+}
+
 .btn-menu {
   width: 25%;
+}
+.mobile-app {
+  .application--wrap {
+    min-height: 90% !important;
+  }
 }
 </style>
