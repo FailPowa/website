@@ -7,7 +7,10 @@
             </div>
             <br/>
             <!-- Call API -> 'active', 'positive', 'intermediary', 'negative'-->
-            <status-indicator id="status-indicator" status="negative" :pulse="true" />
+            <div class="status-container">
+              <status-indicator id="status-indicator" :status="statusValue" :pulse="true" />
+              <p id="status-text">{{ statusText }}</p>
+            </div>
             <div id="scroller" class="scroller">
                 <a @click="scroll('second-layer')"><span></span><span></span><span></span></a>
             </div>
@@ -16,12 +19,10 @@
 </template>
 <script>
 import { StatusIndicator } from 'vue-status-indicator';
+import ApiServices from '@/services.js';
 
 export default {
     name: "FirstLayer",
-    props: {
-
-    },
     components: {
         StatusIndicator
     },
@@ -34,8 +35,19 @@ export default {
     },
     data() {
         return {
-            center: 'center'
+          statusValue: "",
+          statusColor: "",
+          statusText: ""
         }
+    },
+    created() {
+      ApiServices.getStatus().then(res => {
+        this.statusValue = res.data.value;
+        this.statusColor = res.data.color;
+        this.statusText = res.data.text;
+        let text = document.getElementById('status-text');
+        text.style.color = this.statusColor;
+      })
     }
 }
 </script>
@@ -43,12 +55,23 @@ export default {
 .name {
     font-size: 4em;
 }
+/* Status */
 #status-indicator {
     width: 3em;
     height: 3em;
 }
 
-/** Scroller */
+.status-container {
+  margin-left: 6vh;
+  text-align: center;
+}
+
+#status-text {
+  font-size: 2vh;
+}
+/* End Status */
+
+/* Scroller */
 .scroller a {
   position: absolute;
   margin-top: 3vh;
@@ -72,7 +95,7 @@ export default {
   left: 50%;
   width: 48px;
   height: 48px;
-  margin-left: -12px;
+  margin-left: 1vh;
   border-left: 1px solid #fff;
   border-bottom: 1px solid #fff;
   -webkit-transform: rotate(-45deg);
@@ -118,9 +141,9 @@ export default {
     opacity: 0;
   }
 }
-/** END SCROLLER */
+/* END SCROLLER */
 
-/** TYPEWRITER EFFECT */
+/* TYPEWRITER EFFECT */
 .typewriter p {
   overflow: hidden; /* Ensures the content is not revealed until the animation */
   border-right: .10em solid white; /* The typwriter cursor */
@@ -143,5 +166,5 @@ export default {
   from, to { border-color: transparent }
   50% { border-color: white; }
 }
-/** END TYPEWRITER EFFECT */
+/* END TYPEWRITER EFFECT */
 </style>

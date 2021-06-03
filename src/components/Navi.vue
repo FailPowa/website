@@ -1,7 +1,11 @@
 <template>
     <div class="navi" v-on:mouseover="hover = true" v-on:mouseleave="hover = false">
 		<font v-if="!hover" class="navi-hey animate__animated animate__fadeInUp animate__delay-1s" color="white">Hey !</font>
-		<div v-if="hover" class="quest animate__animated animate__fadeInUp">
+		<div v-if="hover && questCompleted" class="quest-reward animate__animated animate__fadeInUp">
+			<v-img :src="require('../images/popo.jpg')" max-height="500" max-width="300"></v-img>
+			<p style="margin-left: 2vh;">Une petite Polaris est apparue !</p>
+		</div>
+		<div v-if="hover && !questCompleted" class="quest animate__animated animate__fadeInUp">
 			<div class="quest-text">
 				<p>Hey ! Listen !</p>
 				<p v-if="nbGems == 0">Trouvons les 3 cristaux perdus sur ce site</p>
@@ -12,8 +16,10 @@
 			<div v-if="nbGems != 3">
 				<v-icon v-if="!redGem" class="red-gem" color="red" x-large>mdi-cards-diamond-outline</v-icon>
 				<v-icon v-else class="red-gem animate__animated animate__pulse animate__infinite" color="red" x-large>mdi-cards-diamond</v-icon>
+
 				<v-icon v-if="!greenGem" class="green-gem" color="green" x-large>mdi-cards-diamond-outline</v-icon>
 				<v-icon v-else class="green-gem animate__animated animate__pulse animate__infinite" color="green" x-large>mdi-cards-diamond</v-icon>
+
 				<v-icon v-if="!blueGem" class="blue-gem" color="blue" x-large>mdi-cards-diamond-outline</v-icon>
 				<v-icon v-else class="blue-gem animate__animated animate__pulse animate__infinite" color="blue" x-large>mdi-cards-diamond</v-icon>
 			</div>
@@ -39,7 +45,8 @@ export default {
 	data() {
 		return {
 			hover: false,
-			gemCount: 0
+			gemCount: 0,
+			questCompleted: false
 		}
 	},
 	props: {
@@ -49,11 +56,11 @@ export default {
 		nbGems: Number
 	},
 	methods: {
-		gemFound(color) {
-			console.log(color);
+		gemFound() {
+			// console.log(color);
 		},
 		questComplete() {
-			console.log('ez');
+			this.questCompleted = this.nbGems == 3 ? true : false;
 		}
 	}
 }
@@ -65,6 +72,7 @@ export default {
     width: 150px;
 	bottom: 5vh;
     right: 5vh;
+	z-index: 1;
 	animation: voo 6s ease-in-out infinite;
 }
 
@@ -91,6 +99,23 @@ export default {
 	border-top-left-radius: 2vh;
     border-top-right-radius: 2vh;
 	border-bottom-left-radius: 2vh;
+}
+.quest-reward {
+	position: absolute;
+	width: fit-content;
+	height: fit-content;
+	background: aliceblue;
+	font-size: 2vh;
+	bottom: 5vh;
+	right: 5vh;
+	border-top-left-radius: 2vh;
+    border-top-right-radius: 2vh;
+	border-bottom-left-radius: 2vh;
+}
+
+.quest-reward .v-image {
+	border-top-left-radius: 2vh;
+    border-top-right-radius: 2vh;
 }
 
 .quest-text {

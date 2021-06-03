@@ -1,5 +1,21 @@
 # website
 
+## Requirements
+- NodeJs
+```shell
+$ apt install nodejs
+$ nodejs --version
+```
+- Npm
+```shell
+$ apt install npm
+$ npm --version
+```
+- Vuejs
+```shell
+$ npm install -g @vue/cli
+```
+
 ## Project setup
 ```
 npm install

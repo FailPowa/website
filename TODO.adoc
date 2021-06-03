@@ -1,41 +1,24 @@
 = TODO =
 
 == General ==
-* git des projets
-* API
-* fichier de traduction
 * Responsive
+* Footer
+** CGU & CGV
+** https://www.service-public.fr/professionnels-entreprises/vosdroits/F31228
 
 == FirstLayer ==
-
-* Centrer le status indicator avec la flèche
+ OK
 
 == SecondLayer ==
 
-* Finir l'interface clean
-* help
-** Affiche le texte sous le menu ( smooth )
-* whoami ( présentation classique )
-** descriptif ?
-* contact
-** Mes différentes plateformes pour me contacter
-*** mail
-*** discord
-*** linkedin
-*** formulaire en version terminal ?
+* Bug des champs avec le handler
 
 == ThirdLayer ==
-
-* Comm avec l'API
-* Fixer les boutons de liens ?
+ OK
 
 == FourthLayer ==
-
-* Validation et exécution du formulaire
-** Fonction de mailing
-** Comm avec l'API
+ OK
 
 == Navi ==
 
-* Fin de la quête
-** Photo de popo
+ OK

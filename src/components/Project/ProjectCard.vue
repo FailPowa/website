@@ -2,13 +2,13 @@
     <v-hover>
         <template v-slot:default="{ hover }">
         <v-card class="mx-auto" max-width="400">
-            <v-img src="../../images/HorseFlame_Priego_3252.jpg"></v-img>
+            <v-img :src="image" height="300" position="left"></v-img>
             <v-card-text class="project-name">
                 <h1 class="title primary--text" style="width: fit-content;">{{ name }}</h1>
-                <v-icon :color="color" class="project-icon">mdi-{{ icon }}</v-icon>
+                <v-icon :color="color" class="project-icon" large>mdi-{{ icon }}</v-icon>
             </v-card-text>
             <v-fade-transition>
-                <v-overlay v-if="hover" absolute color="#036358">
+                <v-overlay v-if="hover" absolute color="#05443D" opacity="0.80">
                     <div class="description-text">
                         <b class="display-1">{{ description }}</b>
                     </div>
@@ -27,7 +27,7 @@
                             <v-icon color="white">mdi-open-in-new</v-icon> Lien direct
                         </v-btn>
                     </div>
-                    <v-icon class="blue-gem" v-if="gem" color="blue" @click="gemFound">mdi-cards-diamond</v-icon>
+                    <v-icon large class="blue-gem" v-if="gem" color="blue" @click="gemFound">mdi-cards-diamond</v-icon>
                 </v-overlay>
             </v-fade-transition>
         </v-card>
@@ -44,7 +44,8 @@ export default {
         gem: Boolean,
         color: String,
         github: String,
-        url: String
+        url: String,
+        image: String,
     },
     methods: {
         gemFound: function() {
@@ -59,7 +60,7 @@ export default {
 }
 
 .project-icon {
-    left: 2vh;
+    left: 3vh;
 }
 
 .description-text {
@@ -74,6 +75,6 @@ export default {
 .blue-gem {
     position: absolute;
     right: 0;
-    top: 21vh;
+    top: 20vh;
 }
 </style>
