@@ -24,7 +24,6 @@ export default {
         console.log(value);
         let first = this.cards.shift();
         this.cards.push(first);
-        console.log(this.cards)
       },
     },
     props: {
@@ -43,8 +42,12 @@ export default {
   position: absolute;
   display: flex;
   width: 100%;
+  margin-top: 1vh;
 }
 .container {
   padding: 0;
+}
+#first-layer {
+  background-color: black;
 }
 </style>

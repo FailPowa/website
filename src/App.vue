@@ -1,6 +1,6 @@
 <template>
   <v-app v-if="!isMobile()">
-    <v-app-bar color="transparent" class="main-content">
+    <v-app-bar color="transparent" fixed class="main-content">
       <v-btn v-for="item in menuItems" :key="item.name" @click="scroll(item.goTo)" class="btn-menu animate__animated animate__fadeInDown" text x-large dark>{{ item.name }}</v-btn>
     </v-app-bar>
     <v-main>
@@ -21,8 +21,8 @@
   </v-app>
   <v-app class="mobile-app" v-else>
     <mobile-layer :cards="mobileCards" class="main-mobile-content"></mobile-layer>
-    <v-footer color="#503177" absolute style="bottom: 7vh;">
-      <v-btn v-for="item in menuItems" :key="item.name" @click="scroll(item.goTo)" class="btn-menu animate__animated animate__fadeInDown" text small dark>{{ item.name }}</v-btn>
+    <v-footer color="#503177" fixed style="bottom: 0; z-index: 5;">
+      <v-btn v-for="item in menuItems" :key="item.name" class="btn-menu animate__animated animate__fadeInDown" text small dark>{{ item.name }}</v-btn>
     </v-footer>
   </v-app>
 </template>
@@ -65,7 +65,7 @@ export default {
       nbGems: 0,
       showBtn: false,
       terminalIsActive: false,
-      mobileCards: ["test", "ez", "ezez", "test 2"]
+      mobileCards: ["accueil", "presentation", "projets", "contact"],
     }
   },
   methods: {
@@ -118,16 +118,9 @@ export default {
 .main-mobile-content {
   width: 100%;
   height: 100%;
-  max-height: 90vh;
-  min-height: 90vh;
 }
 
 .btn-menu {
   width: 25%;
-}
-.mobile-app {
-  .application--wrap {
-    min-height: 90% !important;
-  }
 }
 </style>
