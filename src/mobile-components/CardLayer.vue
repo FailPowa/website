@@ -21,7 +21,7 @@
       <v-list dark color="transparent">
         <template v-for="item in presentationList">
             <v-list-item :key="item.id">
-                <v-list-item-content style="border-bottom: double 0.5vh lightgrey; margin-bottom: 2vh;">
+                <v-list-item-content style="">
                     <v-list-item-title style="font-size: 3vh; margin-bottom: 1vh;">
                         <v-icon large>mdi-{{ item.icon }}</v-icon> {{ item.title }}
                         </v-list-item-title>
@@ -34,34 +34,60 @@
       </v-list>
     </div>
     <div v-if="card == 'projets'" class="cardContainer">
-      <div v-for="p in projects" :key="p.id" class="projectContainer">
-        <v-card width="300" height="150">
-          <v-list dark>
-            <v-list-item>
-              <v-list-item-avatar>
-                <v-img :src="p.imageName"></v-img>
-              </v-list-item-avatar>
-              <v-list-item-content>
-                <v-list-item-title class="title">{{ p.name }}</v-list-item-title>
-              </v-list-item-content>
-              <v-list-item-action>
-                <v-btn v-if="p.github != ''" icon>
-                  <v-icon large>mdi-github</v-icon>
-                </v-btn>
-                <v-btn icon>
-                  <v-icon :color="p.color" large>mdi-{{ p.icon }}</v-icon>
-                </v-btn>
-              </v-list-item-action>
-            </v-list-item>
-            <v-list-item>
-              <v-list-item-subtitle style="white-space: inherit;">{{ p.description }}</v-list-item-subtitle>
-            </v-list-item>
-          </v-list>
-        </v-card>
-      </div>
+      <v-container>
+        <v-row v-for="p in projects" :key="p.id" class="projectContainer">
+          <v-card width="95%" elevation="10">
+            <v-list class="project-data-list" dark>
+              <v-list-item>
+                <v-list-item-avatar>
+                  <v-img :src="p.imageName"></v-img>
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title class="title">{{ p.name }}</v-list-item-title>
+                </v-list-item-content>
+                <v-list-item-action>
+                  <v-btn style="margin-bottom: 1vh;" v-if="p.github != ''" icon>
+                    <v-icon large>mdi-github</v-icon>
+                  </v-btn>
+                  <v-btn icon>
+                    <v-icon :color="p.color" large>mdi-{{ p.icon }}</v-icon>
+                  </v-btn>
+                </v-list-item-action>
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-subtitle style="white-space: inherit;">{{ p.description }}</v-list-item-subtitle>
+              </v-list-item>
+            </v-list>
+          </v-card>
+        </v-row>
+      </v-container>
     </div>
-    <div v-if="card == 'contact'">
-      <p class="cardTitle">{{ card }}</p>
+    <div v-if="card == 'contact'" class="cardContainer">
+      <v-container>
+        <v-row no-gutters>
+          <template v-for="(c, index) in contacts">
+            <v-col :key="index">
+              <v-icon large color="white">{{ c.icon }}</v-icon>
+              <p class="white--text" style="font-size: 2vh; font-weight: bolder;">{{ c.text }}</p>
+            </v-col>
+            <v-responsive v-if="index === 1" :key="`width-${index}`" width="100%"></v-responsive>
+          </template>
+        </v-row>
+        <v-row>
+          <v-form ref="form" class="form" v-model="valid" dark data-aos="fade-down-left">
+            <v-text-field v-model="formDatas.name" :counter="50" :rules="nameRules" label="Nom" solo dense required></v-text-field>
+            <v-text-field v-model="formDatas.firstname" :counter="50" :rules="nameRules" label="Prénom" solo dense required></v-text-field>
+            <v-text-field v-model="formDatas.business" :counter="50" :rules="nameRules" label="Entreprise" solo dense required></v-text-field>
+            <v-text-field v-model="formDatas.mail" :rules="emailRules" label="E-mail" solo dense required></v-text-field>
+            <p v-if="!formSent" class="subtitle" style="color: lightseagreen;">N'hésitez pas à me laisser vos coordonnées afin que je vous recontacte dès que possible</p>
+            <v-btn :color="!valid ? 'error' : 'success'" id="formSubmitBtn" class="mr-4">Envoyer</v-btn>
+            <p v-if="formSent" class="animate__animated animate__fadeInDown validate-message">Votre message a bien été envoyé !</p>
+          </v-form>
+        </v-row>
+      </v-container>
+      <!-- <div>
+        
+      </div> -->
     </div>
   </div>
 </template>
@@ -142,6 +168,49 @@ export default {
       ],
       projects: [],
       showProjectCard: false,
+      valid: false,
+      formSent: false,
+      formDatas : {
+          name: '',
+          firstname: '',
+          business: '',
+          mail: '',
+          message: '',
+      },
+      nameRules: [
+          v => !!v || 'Ce champs est requis',
+          v => (v && v.length <= 50) || 'Le nom doit faire moins de 50 caractères !',
+      ],
+      emailRules: [
+          v => !!v || 'Un mail est requis',
+          v => /.+@.+\..+/.test(v) || 'Le mail doit être valide !',
+      ],
+      contacts: [
+          {
+              name: 'Discord',
+              icon: 'mdi-discord',
+              text: 'FailPowa#9988',
+              url: '#'
+          },
+          {
+              name: 'Github',
+              icon: 'mdi-github',
+              text: 'FailPowa',
+              url: '#'
+          },
+          {
+              name: 'LinkedIn',
+              icon: 'mdi-linkedin',
+              text: 'Florentin Bonnay',
+              url: '#'
+          },
+          {
+              name: 'Mail',
+              icon: 'mdi-at',
+              text: 'florentinb.pro@gmail.com',
+              url: '#'
+          }
+      ],
     };
   },
 
@@ -191,6 +260,11 @@ export default {
         else if (y > interactYThreshold) this.playCard(SKIP_CARD);
         else this.resetCardPosition();
       }
+    });
+
+    interact("#formSubmitBtn").on('tap', () => {
+      if(this.valid)
+        this.validateForm();
     });
   },
 
@@ -269,7 +343,18 @@ export default {
 
     resetCardPosition() {
       this.interactSetPosition({ x: 0, y: 0, rotation: 0 });
-    }
+    },
+
+    validateForm() {
+      this.formDatas.message = "Hello futur moi, " + this.formDatas.name + " " + this.formDatas.firstname + " te contacte depuis la version mobile. Prends rapidement contact ! Ciao !"
+      if(this.$refs.form.validate()) {
+        ApiServices.submitForm(this.formDatas).then(res => {
+          if(res.status == 200)
+            this.formSent = true;
+          // Gestion des erreurs à ajouter ( status = 400 || 403 || 401 || 404)
+        });
+      }
+    },
   }
 };
 </script>
@@ -406,6 +491,20 @@ $fs-card-title: 1.125em;
 
 .projectContainer {
   margin-bottom: 3vh;
-  margin-left: 5vh;
+  padding-left: 3vh;
+}
+
+.form {
+  width: 90%;
+  margin: 3vh;
+}
+
+.validate-message {
+    color: #4caf50;
+    font-size: 2vh;
+    padding-top: 2vh;
+}
+.project-data-list {
+  background-color: #13155f;
 }
 </style>
