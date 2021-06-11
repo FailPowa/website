@@ -104,7 +104,8 @@ export default {
   mixins: [detectMobile],
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
+@import "scss/colors.scss";
 /* main content for pc */
 .main-content {
   background: url('https://images.unsplash.com/photo-1534972195531-d756b9bfa9f2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=2000') no-repeat center center fixed;
@@ -118,6 +119,7 @@ export default {
 .main-mobile-content {
   width: 100%;
   height: 100%;
+  background-image: linear-gradient(-180deg, $body-gradient-start 2%, $body-gradient-end 99%);
 }
 
 .btn-menu {

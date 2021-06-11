@@ -1,6 +1,6 @@
 <template>
   <div v-if="isShowing" 
-        ref="interactElement" 
+        ref="interactElement"
         :class="{ isAnimating: isInteractAnimating, isCurrent: isCurrent }" 
         class="card" 
         :style="{ transform: transformString }">
@@ -18,20 +18,35 @@
       </div>
     </div>
     <div v-if="card == 'presentation'" class="cardContainer">
-      <v-list dark color="transparent">
-        <template v-for="item in presentationList">
-            <v-list-item :key="item.id">
-                <v-list-item-content style="">
-                    <v-list-item-title style="font-size: 3vh; margin-bottom: 1vh;">
-                        <v-icon large>mdi-{{ item.icon }}</v-icon> {{ item.title }}
-                        </v-list-item-title>
-                    <div v-for="text in item.text" :key="text">
-                        <v-list-item-subtitle style="font-size: 2vh; white-space: inherit;">{{ text }}</v-list-item-subtitle>
-                    </div>
+        <v-list dark three-line color="transparent">
+          <template v-for="item in presentationList">
+            <v-card color="#503177" :key="item.id" elevation="10" width="95%" style="margin-left: 1.5vh; margin-bottom: 4vh; border-radius: 3vh;">
+            <v-list-group :value="item.isActive" :id="item.id" :prepend-icon="'mdi-' + item.icon" class="presentation-list-group">
+              <template v-slot:activator>
+                <v-list-item-title style="color: white; overflow: visible;">{{ item.title }}</v-list-item-title>
+              </template>
+              <template>
+                <v-list-item-content>
+                  <div v-for="text in item.text" :key="text">
+                    <v-list-item-subtitle style="color: lightgray; white-space: inherit;">{{ text }}</v-list-item-subtitle>
+                  </div>
                 </v-list-item-content>
-            </v-list-item>
-        </template>
-      </v-list>
+              </template>
+            </v-list-group>
+              <!-- <v-list-item :key="item.id">
+                <v-list-item-avatar>
+                  <v-icon large>mdi-{{ item.icon }}</v-icon>
+                </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title style="font-size: 3vh; margin-bottom: 1vh;">{{ item.title }}</v-list-item-title>
+                    <div v-for="text in item.text" :key="text">
+                      <v-list-item-subtitle style="font-size: 2vh; white-space: inherit;">{{ text }}</v-list-item-subtitle>
+                    </div>
+                  </v-list-item-content>
+              </v-list-item> -->
+            </v-card>
+          </template>
+        </v-list>
     </div>
     <div v-if="card == 'projets'" class="cardContainer">
       <v-container>
@@ -142,6 +157,7 @@ export default {
           {
               id: 1,
               icon: "gesture-double-tap",
+              isActive: true,
               title: "Besoin d'un coup de main ?",
               text: [
                   "Je saurais vous apporter le soutien dont vous avez besoin dans vos projets.",
@@ -151,6 +167,7 @@ export default {
           {
               id: 2,
               icon: "lightbulb-on",
+              isActive: false,
               title: "Une nouvelle idée en tête ?",
               text: [
                   "Contactez-moi pour m'exposer votre idée, discutons-en !",
@@ -160,6 +177,7 @@ export default {
           {
               id: 3,
               icon: "coffee",
+              isActive: false,
               title: "Envie d'un café ?",
               text: [
                   "Discutons de sujets, professionnels ou non, autour d'un café, à tête reposée."
@@ -243,7 +261,8 @@ export default {
 
         let rotation = interactMaxRotation * (x / interactXThreshold);
 
-        if (rotation > interactMaxRotation) rotation = interactMaxRotation;
+        if (rotation > interactMaxRotation)
+          rotation = interactMaxRotation;
         else if (rotation < -interactMaxRotation)
           rotation = -interactMaxRotation;
 
@@ -255,16 +274,26 @@ export default {
         const { interactXThreshold, interactYThreshold } = this.$options.static;
         this.isInteractAnimating = true;
 
-        if (x > interactXThreshold) this.playCard(ACCEPT_CARD);
-        else if (x < -interactXThreshold) this.playCard(REJECT_CARD);
-        else if (y > interactYThreshold) this.playCard(SKIP_CARD);
-        else this.resetCardPosition();
+        if (x > interactXThreshold)
+          this.playCard(ACCEPT_CARD);
+        else if (x < -interactXThreshold)
+          this.playCard(REJECT_CARD);
+        else if (y > interactYThreshold)
+          this.playCard(SKIP_CARD);
+        else
+          this.resetCardPosition();
       }
     });
 
     interact("#formSubmitBtn").on('tap', () => {
       if(this.valid)
         this.validateForm();
+    });
+
+    interact(".presentation-list-group").on('tap', (event) => {
+      this.presentationList.forEach(item => {
+        item.isActive = item.id == event.currentTarget.id ? !item.isActive : false;
+      });
     });
   },
 
@@ -507,4 +536,9 @@ $fs-card-title: 1.125em;
 .project-data-list {
   background-color: #13155f;
 }
+
+span.v-ripple__container {
+  display: none !important;
+}
+
 </style>
