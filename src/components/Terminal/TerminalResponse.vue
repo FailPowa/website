@@ -8,16 +8,19 @@
         <div v-if="currentCommand == 'presentation'" class="animate__animated animate__fadeIn">
             <v-list dark color="transparent">
                 <template v-for="item in presentationList">
-                    <v-list-item :key="item.id">
-                        <v-list-item-content style="border-bottom: double 0.5vh lightgrey; margin-bottom: 2vh;">
-                            <v-list-item-title style="font-size: 3vh; margin-bottom: 1vh;">
-                                <v-icon large>mdi-{{ item.icon }}</v-icon> {{ item.title }}
-                                </v-list-item-title>
-                            <div v-for="text in item.text" :key="text">
-                                <v-list-item-subtitle style="font-size: 2vh;">{{ text }}</v-list-item-subtitle>
-                            </div>
-                        </v-list-item-content>
-                    </v-list-item>
+                    <v-card :key="item.id" color="#192227" style="border-bottom: double 0.5vh lightgrey; margin-bottom: 3vh;">
+                        <v-list-item>
+                            <v-list-item-content>
+                                <v-list-item-title style="font-size: 3vh; margin-bottom: 1vh;">
+                                    <v-icon large>mdi-{{ item.icon }}</v-icon> {{ item.title }}
+                                    </v-list-item-title>
+                                <div v-for="text in item.text" :key="text">
+                                    <v-list-item-subtitle v-if="!text.isCitation" style="font-size: 2vh;">{{ text.value }}</v-list-item-subtitle>
+                                    <v-list-item-subtitle v-else style="color: whitesmoke; font-size: 2vh;">{{ text.value }}</v-list-item-subtitle>
+                                </div>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </v-card>
                 </template>
             </v-list>
         </div>
@@ -146,8 +149,9 @@ export default {
                     icon: "gesture-double-tap",
                     title: "Besoin d'un coup de main ?",
                     text: [
-                        "Je saurais vous apporter le soutien dont vous avez besoin dans vos projets.",
-                        "Fort de mes expériences dans de nombreuses technologies, je saurais me montrer polyvalent et autonome."
+                        { isCitation: false, value: "Vous avez besoin d'une aide rapide et efficace pour l'un de vos projets ?"},
+                        { isCitation: false, value: "Fort de mes expériences sur de nombreuses technologies, l'adaptation et la polyvalence sont des valeurs qui me sont chères." },
+                        { isCitation: false, value: "Ayant une véritable passion pour l'apprentissage, je saurais me former rapidement afin de répondre à vos besoins dans les temps." }
                     ]
                 },
                 {
@@ -155,8 +159,8 @@ export default {
                     icon: "lightbulb-on",
                     title: "Une nouvelle idée en tête ?",
                     text: [
-                        "Contactez-moi pour m'exposer votre idée, discutons-en !",
-                        "Un regard neuf et approfondi sur votre idée permettrait de la faire évoluer en projet."
+                        { isCitation: false, value: "Contactez-moi pour m'exposer votre idée, discutons-en !" },
+                        { isCitation: false, value: "Un regard neuf et approfondi sur votre projet permettrait de le faire avancer et évoluer." }
                     ]
                 },
                 {
@@ -164,7 +168,9 @@ export default {
                     icon: "coffee",
                     title: "Envie d'un café ?",
                     text: [
-                        "Discutons de sujets, professionnels ou non, autour d'un café, à tête reposée."
+                        { isCitation: false, value: "Prenons une pause et discutons autour d'un café, à tête reposé." },
+                        { isCitation: true, value: "\"L'histoire du commerce est celle de la communication des peuples.\" - Montesquieu" },
+                        { isCitation: true, value: "\"Je ne perds jamais. Soit je gagne, soit j’apprends.\" - Nelson Mandela" }
                     ]
                 }
             ]
@@ -206,12 +212,13 @@ export default {
     },
     methods: {
         fillContactForm(valeur) {
+            console.log(this.contactForm)
             this.contactForm.every(element => {
                 if(element.value == '' && valeur != "send") {
                     element.value = valeur;
                     return false;
                 } else {
-                    if(element.id == this.contactForm.length && element.value != '' && valeur == "yes")
+                    if(element.id == this.contactForm.length && element.value != '' && valeur == "send")
                         this.sendForm()
                     return true;
                 }
