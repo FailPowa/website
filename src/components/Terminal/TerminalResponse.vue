@@ -8,16 +8,18 @@
         <div v-if="currentCommand == 'presentation'" class="animate__animated animate__fadeIn">
             <v-list dark color="transparent">
                 <template v-for="item in presentationList">
-                    <v-list-item :key="item.id">
-                        <v-list-item-content style="border-bottom: double 0.5vh lightgrey; margin-bottom: 2vh;">
-                            <v-list-item-title style="font-size: 3vh; margin-bottom: 1vh;">
-                                <v-icon large>mdi-{{ item.icon }}</v-icon> {{ item.title }}
-                                </v-list-item-title>
-                            <div v-for="text in item.text" :key="text">
-                                <v-list-item-subtitle style="font-size: 2vh;">{{ text }}</v-list-item-subtitle>
-                            </div>
-                        </v-list-item-content>
-                    </v-list-item>
+                    <v-card :key="item.id" color="#192227" style="border-bottom: double 0.5vh lightgrey; margin-bottom: 3vh;">
+                        <v-list-item>
+                            <v-list-item-content>
+                                <v-list-item-title style="font-size: 3vh; margin-bottom: 1vh;">
+                                    <v-icon large>mdi-{{ item.icon }}</v-icon> {{ item.title }}
+                                    </v-list-item-title>
+                                <div v-for="text in item.text" :key="text">
+                                    <v-list-item-subtitle style="font-size: 2vh;">{{ text }}</v-list-item-subtitle>
+                                </div>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </v-card>
                 </template>
             </v-list>
         </div>
@@ -206,12 +208,13 @@ export default {
     },
     methods: {
         fillContactForm(valeur) {
+            console.log(this.contactForm)
             this.contactForm.every(element => {
                 if(element.value == '' && valeur != "send") {
                     element.value = valeur;
                     return false;
                 } else {
-                    if(element.id == this.contactForm.length && element.value != '' && valeur == "yes")
+                    if(element.id == this.contactForm.length && element.value != '' && valeur == "send")
                         this.sendForm()
                     return true;
                 }
